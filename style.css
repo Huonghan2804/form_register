@@ -1,29 +1,72 @@
-.page-container {
-  height: 100vh;
-}
 
-.bound {
-  box-shadow: 0 0 10px black;
-  border-radius: 10px;
-  height: 80%;
-  background-image: linear-gradient(to right, #ddd6f3, #faaca8);
-}
-
-.register {
-  top: 10px;
-  right: 10px;
-}
-
-.form {
-  width: 100%;
-  height: 100%;
-}
-
-.err-msg {
-  font-size: 12px;
-}
-
-h1 {
-  text-align: center;
-  color: rgba(7, 236, 7, 0.647);
-}
+          @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@100;200;300;400;500;600;700&display=swap');
+          *{
+               margin: 0;
+               padding: 0;
+               box-sizing: border-box;
+               font-family: 'Public Sans', sans-serif;
+               user-select: none;
+          }
+          .navigation{
+               background-color: #161616;
+          }
+          .brand p{
+               font-size: 24px;
+               font-weight: bold;
+          }
+          .links{
+               color: #a3a3a3;
+          }
+          .loginlink:hover,
+          .registerlink:hover{
+               color: white;
+               transition: .3s;
+          }
+          .authenticate{
+               height: calc(100vh - 44px);
+               min-height: 600px;
+          }
+          .loginform p{
+               font-size: 13px;
+          }
+          .myinp{
+               border: 1px solid #e3e3e3;
+               outline: none;
+               padding: 8px 10px;
+               font-size: 14px;
+               width: 100%;
+               display: block;
+               margin-top: 15px;
+          }
+          .myinp:focus-visible{
+               border: 1px solid black;
+          }
+          .mybtn{
+               background-image: linear-gradient(to right, rgb(236, 72, 153), rgb(239, 68, 68), rgb(234, 179, 8));
+               color: white;
+               outline: none;
+               border: none;
+               width: 100%;
+               padding: 8px 10px;
+          }
+          .mybtn:hover{
+               box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+          }
+          .loginform,
+          .registerform{
+               box-shadow: 0px 0px 10px rgba(0,0,0,0.75);
+               border-radius: 3px;
+               padding: 60px 40px;
+               width: 400px;
+          }
+          .active{
+               color: white;
+          }
+          .msg{
+               font-size: 10px !important;
+               font-weight: bold;
+          }
+          .inperr{
+               border: 1px solid #dc3545;
+          }
+    

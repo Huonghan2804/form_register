@@ -1,114 +1,140 @@
-var rgt = document.querySelector(".register");
-var login = document.querySelector(".login-form");
-var title = document.querySelector(".form-title");
-var register = document.querySelector(".register-form");
-var loginbtn = document.querySelector(".login-btn");
-var registerbtn = document.querySelector(".register-btn");
-var isLogin = true;
-var linputs = document.querySelectorAll(".login-form input");
-var rinputs = document.querySelectorAll(".register-form input");
-var lmsg = document.querySelectorAll(".login-form .err-msg");
-var rmsg = document.querySelectorAll(".register-form .err-msg");
+let loginform = document.querySelector(".loginform");
+let registerform = document.querySelector(".registerform");
+let loginlink = document.querySelector(".loginlink");
+let registerlink = document.querySelector(".registerlink");
+let loginbtn = document.querySelector(".loginbtn");
+let registerbtn = document.querySelector(".registerbtn");
+let msgs = document.querySelectorAll(".msg");
+let inps = document.querySelectorAll(".myinp");
 
-const USERNAME = "admin";
-const PASSWORD = "123456789";
+let accounts = [
+  {
+    username: "admin",
+    password: "admin@123",
+  },
+];
 
-rgt.addEventListener("click", function () {
-  if (isLogin) {
-    login.classList.add("d-none");
-    register.classList.remove("d-none");
-    rgt.innerText = "Sign in";
-    title.innerText = "Register Form";
-    linputs.forEach((item) => {
-      if (!item.classList.contains("login-btn")) {
-        item.value = "";
-      }
-    });
-    lmsg.forEach((item) => {
-      item.innerHTML = "";
-    });
-  } else {
-    login.classList.remove("d-none");
-    register.classList.add("d-none");
-    rgt.innerText = "Sign up";
-    title.innerText = "Login Form";
-    rinputs.forEach((item) => {
-      if (!item.classList.contains("register-btn")) {
-        item.value = "";
-      }
-    });
-    rmsg.forEach((item) => {
-      item.innerHTML = "";
-    });
-  }
-  isLogin = !isLogin;
+function clearMessage() {
+  msgs.forEach(function (item) {
+    item.innerText = "";
+  });
+}
+
+function clearInput() {
+  inps.forEach(function (item) {
+    item.value = "";
+    item.classList.remove("inperr");
+  });
+}
+
+registerlink.addEventListener("click", function () {
+  loginform.classList.add("d-none");
+  registerform.classList.remove("d-none");
+  loginlink.classList.remove("active");
+  registerlink.classList.add("active");
+  clearMessage();
+  clearInput();
 });
 
+loginlink.addEventListener("click", function () {
+  loginform.classList.remove("d-none");
+  registerform.classList.add("d-none");
+  loginlink.classList.add("active");
+  registerlink.classList.remove("active");
+  clearMessage();
+  clearInput();
+});
+
+function checkAccount({ username, password }) {
+  let filterAccount = accounts.filter(function (item) {
+    return item.username == username && item.password == password;
+  });
+  return filterAccount.length > 0;
+}
+
+function checkAccountExist({ username, password }) {
+  let filterAccount = accounts.filter(function (item) {
+    return item.username == username;
+  });
+  return filterAccount.length > 0;
+}
+
 loginbtn.addEventListener("click", function () {
-  var inputs = document.querySelectorAll(".login-form input");
-  var msg = document.querySelectorAll(".login-form .err-msg");
-  var username = inputs[0];
-  var password = inputs[1];
-  if (password.value != "" && username.value != "") {
-    if (username.value === USERNAME && password.value === PASSWORD) {
-      msg[2].innerHTML = "";
-      setTimeout(() => alert("Login success"), 200);
+  let inputs = document.querySelectorAll(".loginform .myinp");
+  let msgs = document.querySelectorAll(".loginform .msg");
+  let username = inputs[0].value;
+  let password = inputs[1].value;
+  if (username && password) {
+    if (checkAccount({ username, password })) {
+      alert("Logged in");
     } else {
-      msg[2].innerHTML = "Invalid username or password";
+      msgs[2].innerText = "username or password is not correct";
+      inps[2].classList.add("inperr");
     }
   } else {
-    if (username.value == "") {
-      msg[0].innerHTML = "username is empty";
-    } else {
-      msg[0].innerHTML = "";
+    if (!username) {
+      msgs[0].innerText = "username cannot be blank";
+      inps[0].classList.add("inperr");
     }
-    if (password.value == "") {
-      msg[1].innerHTML = "password is empty";
-    } else {
-      msg[1].innerHTML = "";
+    if (!password) {
+      msgs[1].innerText = "password cannot be blank";
+      inps[1].classList.add("inperr");
     }
   }
 });
 
 registerbtn.addEventListener("click", function () {
-  var inputs = document.querySelectorAll(".register-form input");
-  var msg = document.querySelectorAll(".register-form .err-msg");
-  var username = inputs[0];
-  var password = inputs[1];
-  var repass = inputs[2];
-  if (username.value != "" && password.value != "" && repass.value != "") {
-    var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (password.value !== repass.value) {
-      msg[2].innerHTML = "password didn't match";
-    } else {
-      if (!password.value.match(regex)) {
-        msg[1].innerHTML =
-          "password must be at least 8 character, contain number and text";
-      } else {
-        msg[1].innerHTML = "";
-        msg[2].innerHTML = "";
-        msg[0].innerHTML = "";
-        linputs.forEach((item) => {
-          if (!item.classList.contains("login-btn")) {
-            item.value = "";
+  let inputs = document.querySelectorAll(".registerform .myinp");
+  let msgs = document.querySelectorAll(".registerform .msg");
+  let username = inputs[0].value;
+  let password = inputs[1].value;
+  let repassword = inputs[2].value;
+  if (username && password && repassword) {
+    if (password == repassword) {
+      if (password.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)) {
+        if (!checkAccountExist({ username, password })) {
+          accounts.push({ username, password });
+          let cfm = confirm("Register success");
+          if (cfm) {
+            loginform.classList.remove("d-none");
+            registerform.classList.add("d-none");
+            loginlink.classList.add("active");
+            registerlink.classList.remove("active");
+            clearInput();
           }
-        });
-        login.classList.remove("d-none");
-        register.classList.add("d-none");
-        rgt.innerText = "Sign up";
-        title.innerText = "Login Form";
+        } else {
+          msgs[3].innerHTML = "account already exist";
+        }
+      } else {
+        msgs[1].innerText =
+          "password must be at least 8 charactor, contains at least 1 letter and 1 number";
+        inputs[1].classList.add("inperr");
       }
+    } else {
+      msgs[2].innerText = "password didnot match";
+      inputs[2].classList.add("inperr");
     }
   } else {
-    if (username.value == "") {
-      msg[0].innerHTML = "username is empty";
-    } else {
-      msg[0].innerHTML = "";
+    if (!username) {
+      msgs[0].innerText = "username cannot be blank";
+      inputs[0].classList.add("inperr");
     }
-    if (password.value == "") {
-      msg[1].innerHTML = "password is empty";
-    } else {
-      msg[1].innerHTML = "";
+    if (!password) {
+      msgs[1].innerText = "password cannot be blank";
+      inputs[1].classList.add("inperr");
+    }
+    if (!repassword) {
+      msgs[2].innerText = "please confirm your password";
+      inputs[2].classList.add("inperr");
     }
   }
+});
+
+inps.forEach(function (item) {
+  item.addEventListener("click", function () {
+    inps.forEach(function (item) {
+      item.classList.remove("inperr");
+    });
+    clearMessage();
+  });
 });
